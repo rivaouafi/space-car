@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Space car</title>
+     <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="author" content="ridha ouafi">
+    
+    
+    <style>  
+    
+            * {
+  box-sizing: border-box;
+}
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.header1 {
+ display: flex;
+ flex-wrap: wrap;
+  
+ font-size: 1em;
+ color: white;
+ background-color: green;
+ border: 1px solid springgreen;
+ padding: 2px;
+} 
+.header2 {
+ display: flex;
+ flex-wrap: wrap;
+ 
+  font-size:3em;
+  color: white;
+  
+ background-color: black;
+ border: 1px solid springgreen;
+ padding: 10px;
+}
+
+ .footer {  
+ display: flex;
+ flex-wrap: wrap; 
+justify-content: center;
+ background-color: black;
+ border: 2px solid springgreen;
+ padding: 10px;
+ color: white;
+ text-align: center;
+ font-size: 1em;
+ position: fixed;
+ bottom: 0;
+ width: 97%;
+ }
+ /* Six buttons with code link to some pages in this project */
+ .button-group {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ align-items: center;
+ margin-top: 20px;
+ }
+ .button {
+ display: inline-block;
+ padding: 4px;
+ margin: 4px;
+ background-color: GREEN;
+ color: white;
+ border: 1px solid black;
+ border-radius: 4px;
+ font-size: 1em;
+ text-align: center;
+ text-decoration: none;
+ }
+
+ /* Fixed background */
+ body { 
+
+   background-color: #FFFFFF;
+   background-image: url('space20.jpg');
+   background-attachment: fixed;
+   background-position: center center;
+   background-repeat: repeat;
+   background-size: 100% 100%;
+   color: #000000;
+   font-family: Arial;
+   font-weight: normal;
+   font-size: 13px;
+   line-height: 1.1875;
+   margin: 0;
+   padding: 0;
+
+ 
+ }
+
+        #gameArea {
+            width: 1000px;
+            height: 500px;
+            background-color: transparent;
+            border: 1px solid SKYBLUE;
+            position: relative;
+        }
+
+
+				
+		  				.buttone {
+            width: 50px;
+            height: 50px;
+            background-color: springgreen;
+			 border: 2px solid red;
+			 border-radius: 30%;
+             padding: 6px;
+             margin: 6px;
+            display: inline-block;
+            text-align: center;
+			color: red;
+            line-height: 6px;
+            cursor: pointer;
+        }
+		
+		
+            #character {
+            width: 70px;
+            height: 40px;
+            background-image: url('canon1.png');
+            position: absolute;
+            bottom: 0;
+            left: 0;
+
+        }
+        .bullet {
+            width: 200px;
+            height: 70px;
+            background-image: url('bullets1.png');
+
+            position: absolute;
+
+        }
+        .enemy {
+            width: 100px;
+            height: 60px;
+            background-image: url('enemy2.png');
+            position: absolute;  position: absolute;
+        top: 0px;
+        left: 60px;
+
+        animation: moveEnemy 3s infinite;
+    }
+    @keyframes moveEnemy {
+        0% {
+            transform: translate(0, 0);
+        }
+        25% {
+            transform: translate(300px, 300px);
+        }
+        50% {
+            transform: translate(0, 50px);
+        }
+        75% {
+            transform: translate(-50px, 100px);
+        }
+        100% {
+            transform: translate(0, 0);
+        }
+
+        }
+
+
+
+
+         /* Flexible layout responsive design */
+
+ .header1 {
+ font-size: 0.5em;
+ padding: 2px;
+ }
+ /* Big red header with red border */
+ .header2 {
+ font-size: 4em;
+ padding: 2px;
+ }
+ /* Six buttons with code link to some pages in this project */
+ .button-group {
+ margin-top: 10px;
+ }
+ .button {
+ padding: 5px;
+ margin: 5px;
+ font-size: 1em;
+ }
+
+
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.column {
+  flex: 100%;
+
+  padding: 5px;
+}
+.column img { 
+
+  width: 100%;
+  height: auto;
+
+      }
+@media screen and (max-width: 600px) {
+  .column {
+  
+    width: 100%;
+  }
+   
+
+} 
+        
+        
+    </style>
+</head>
+<body> 
+
+
+ 
+ <div class="button-group">
+ <a href="index.html" class="button">introduction</a>
+ <a href="index.html" class="button">index</a>
+ <a href="index.html" class="button">topics</a>
+ <a href="about.html" class="button">about</a>
+ <a href="https://linkmovies.netlify.app" class="button">blog</a>
+ <a href="https://www.facebook.com/toni.romanov.92" class="button">contact</a>
+  </DIV>
+
+
+
+   <div class="row">  
+
+    <div id="gameArea"> 
+
+              <div class="score">  </div>
+    
+        <div id="character">  </div>
+		
+		
+		 </div>    
+	
+
+							    <!-- Audio elements for movement sounds -->
+    <audio id="shootSound" src="mov.wav" type="audio/wav"></audio>
+    <audio id="movSound" src="mov.wav" type="audio/wav"></audio>
+	<audio id="passSound" src="pass.wav" type="audio/wav"></audio>
+	<audio id="pass1Sound" src="mov.wav" type="audio/wav"></audio>
+    <audio id="loserSound" src="loser.wav" type="audio/wav"></audio>
+	<audio id="introSound" src="worning.wav" type="audio/wav"></audio>
+    <audio id="hitSound" src="hit.wav" type="audio/wav"></audio>
+	
+	
+	
+    <script>
+var character = document.getElementById("character");
+var x = 0;
+var y = 0;
+
+const shootSound = document.getElementById('shootSound');
+const movSound = document.getElementById('movSound');
+const passSound = document.getElementById('passSound');
+const pass1movSound = document.getElementById('pass1Sound');
+const introSound = document.getElementById('introSound');
+const hitSound = document.getElementById('hitSound');
+
+
+// Get the window width and height
+let windowWidth = window.innerWidth;
+let windowHeight = window.innerHeight;
+// Set the initial speed and direction
+let speed = 3;
+let dx = 0;
+let dy = 0;
+  let scor = 0;
+  
+document.addEventListener("keydown", function(event) {
+    // Get the key code
+    let key = event.keyCode;
+    // Set the speed and direction based on the arrow keys
+    if (key == 37) { // Left arrow
+        dx = -speed;
+        dy = 0;
+        movSound.play();
+
+    } else if (key == 39) { // Right arrow
+        dx = speed;
+        dy = 0;
+        pass1Sound.play();
+
+    }
+    if (key == 38) { // Up arrow
+                dx = 0;
+        hitSound.play();
+
+            }
+         if (key == 40) { // Down arrow
+                dx = 0;
+
+        }
+
+});
+// Add an event listener for keyup events
+document.addEventListener("keyup", function(event) {
+    // Stop the movement when the arrow keys are released
+    dx = 0;
+    dy = 0;
+});
+// Define a function to update the character position
+function update() {
+    // Get the current position of the character
+    let x = character.offsetLeft;
+    let y = character.offsetTop;
+    // Add the speed and direction to the position
+    x += dx;
+    y += dy;
+    // Wrap around the window edges
+    if (x < 0) {
+        x = windowWidth - character.offsetWidth;
+    } else if (x > windowWidth - character.offsetWidth) {
+        x = 0;
+    }
+    if (y < 0) {
+        y = windowHeight - character.offsetHeight;
+    } else if (y > windowHeight - character.offsetHeight) {
+        y = 0;
+    }
+
+  if (scor === 60) {
+
+ character.style.backgroundImage = "url('.')";
+ introSound.play();
+
+
+                    }
+
+
+
+    // Set the new position of the character
+    character.style.left = x + "px";
+    character.style.top = y + "px";
+    // Request the next animation frame
+    requestAnimationFrame(update);
+}
+// Start the animation loop
+update();
+</script>
+
+
+
+
+  <script>
+        var character = document.getElementById("character");
+        var bullets = [];
+        var enemies = [];
+          var score = 0;
+    var scoreElement = document.createElement("div");
+    scoreElement.style.position = "absolute";
+    scoreElement.style.top = "50px";
+    scoreElement.style.right = "300px";
+    scoreElement.style.fontSize = "24px";
+    scoreElement.style.color = "white";
+    scoreElement.innerHTML = "Score: " + score;
+
+    document.body.appendChild(scoreElement);
+
+
+        function moveCharacter(event) {
+            var key = event.keyCode;
+            if (key === 37) { // left arrow
+                character.style.left = parseInt(character.style.left) - 10 + "px";
+            } else if (key === 39) { // right arrow
+                character.style.left = parseInt(character.style.left) + 10 + "px";
+            } else if (key === 38) { // up arrow
+                var bullet = document.createElement("div");
+                bullet.className = "bullet";
+                bullet.style.left = parseInt(character.style.left) + 20 + "px";
+                bullet.style.bottom = "50px";
+                document.getElementById("gameArea").appendChild(bullet);
+                bullets.push(bullet);
+            }
+        }
+        function moveBullets() {
+            for (var i = 0; i < bullets.length; i++) {
+                var bullet = bullets[i];
+                bullet.style.bottom = parseInt(bullet.style.bottom) + 10 + "px";
+                if (parseInt(bullet.style.bottom) > 500) {
+                    bullet.remove();
+                    bullets.splice(i, 1);
+                    i--;
+                } else {
+                    for (var j = 0; j < enemies.length; j++) {
+                        var enemy = enemies[j];
+                        if (hitTest(bullet, enemy)) {
+                            enemy.remove();
+                            enemies.splice(j, 1);
+                            j--;
+                            bullet.remove();
+                            bullets.splice(i, 1);
+                            i--;
+
+
+
+            score += 10;
+            scoreElement.innerHTML = "Score: " + score;
+            if (score == 300) {
+
+
+                window.location.href = "index+3.html";
+
+            }
+          }
+        }
+
+
+
+                      }
+            }
+        }
+        function moveEnemies() {
+            for (var i = 0; i < enemies.length; i++) {
+                var enemy = enemies[i];
+                enemy.style.bottom = parseInt(enemy.style.bottom) - 0 + "px";
+                if (parseInt(enemy.style.bottom) < 0) {
+                    enemy.remove();
+                    enemies.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+        function createEnemy() {
+            var enemy = document.createElement("div");
+            enemy.className = "enemy";
+            enemy.style.left = Math.floor(Math.random() * 600) + "px";
+            enemy.style.bottom = "300px";
+            document.getElementById("gameArea").appendChild(enemy);
+            enemies.push(enemy);
+        }
+        function hitTest(a, b) {
+            var aRect = a.getBoundingClientRect();
+            var bRect = b.getBoundingClientRect();
+            return !(
+                (aRect.bottom < bRect.top) ||
+                (aRect.top > bRect.bottom) ||
+                (aRect.right < bRect.left) ||
+                (aRect.left > bRect.right)
+            );
+        }
+        setInterval(moveBullets, 50);
+        setInterval(moveEnemies, 500);
+        setInterval(createEnemy, 1000);
+        document.addEventListener("keydown", moveCharacter);
+    </script>
+	
+	  <div class="buttone" id="left">left</div>
+    <div class="buttone" id="right">right</div>
+    
+    <div class="buttone" id="fire">shoot</div>
+	
+	</div>
+   
+     <script>
+	 
+
+
+        // Initialize character position
+        let characterX = 200;
+        let characterY = 400;
+		
+// Get the window width and height
+
+// Set the initial speed and direction
+
+
+        // Update character position based on button clicks
+        function moveCharacter(direction) {
+            switch (direction) {
+                case 'up':
+                    characterX -= 10;
+					
+					movSound.play();
+					
+                    break;
+                case 'down':
+                    characterX += 10;
+					movSound.play();
+					
+                    break;
+                case 'left':
+                    characterX -= 20;
+					movSound.play();
+					 
+       break;
+                   
+		
+                case 'right':
+                    characterX += 20;
+					movSound.play();
+					break;
+                    
+                case 'fire':
+                    // Implement bullet firing logic here
+                    console.log('Firing bullets!');
+					
+                 break;
+					
+            }
+            updateCharacterPosition();
+        }
+        // Update character display
+        function updateCharacterPosition() {
+            const character = document.getElementById('character');
+            character.style.left = characterX + 'px';
+            character.style.top = characterY + 'px';
+						const movSound = document.getElementById('movSound');
+const passSound = document.getElementById('passSound');
+const pass1movSound = document.getElementById('pass1Sound');
+const introSound = document.getElementById('introSound');
+const hitSound = document.getElementById('hitSound');
+			
+        }
+        // Event listeners for gamepad buttons
+        document.getElementById('up').addEventListener('click', () => moveCharacter('up'));
+        document.getElementById('down').addEventListener('click', () => moveCharacter('down'));
+        document.getElementById('left').addEventListener('click', () => moveCharacter('left'));
+        document.getElementById('right').addEventListener('click', () => moveCharacter('right'));
+        document.getElementById('fire').addEventListener('click', () => moveCharacter('fire'));
+		
+
+    </script>
+	
+	
+
+         <a href=" "><img src="car3.png" alt="image3" style="position: absolute; top:100px;left:auto; width:100%;border:6;">
+  </a>
+
+
+
+     <img id="imagee" src="while1.png" alt="Your Imagee" style="position: absolute; top:440px;left:90px; width:40%;border:0;">
+  <script>
+    const image = document.getElementById("imagee");
+    let rotation = 0;
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        rotation -= 10;
+      } else if (event.key === "ArrowRight") {
+        rotation += 10;
+      }
+      image.style.transform = `translate(0%, 0%) rotate(${rotation}deg)`;
+    });
+  </script>
+
+
+      </div>
+      </div>
+
+
+
+</body>
+</html>
